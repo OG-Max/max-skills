@@ -1,0 +1,14 @@
+{
+  "name": "max-skills",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OG-Max's agent skills for engineering work",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OG-Max/max-skills"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "validate": "node scripts/validate-skill.mjs"
+  }
+}

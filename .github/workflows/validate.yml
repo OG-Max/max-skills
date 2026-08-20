@@ -1,0 +1,47 @@
+name: Validate skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: agentskills.io spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Local spec validator (all skills)
+        run: node scripts/validate-skill.mjs
+
+      - name: Official skills-ref (each skill)
+        run: |
+          set -euo pipefail
+          found=0
+          while IFS= read -r dir; do
+            found=1
+            echo "::group::skills-ref ${dir}"
+            npx --yes skills-ref validate "$dir"
+            echo "::endgroup::"
+          done < <(find skills -type f -name SKILL.md -printf '%h\n' | sort)
+          if [ "$found" -eq 0 ]; then
+            echo "No SKILL.md files under skills/" >&2
+            exit 1
+          fi
+
+      - name: Marketplace spec action (audit-your-codebase)
+        uses: Flash-Brew-Digital/validate-skill@v1
+        with:
+          path: ./skills/engineering/audit-your-codebase
+          fail-on-warning: "true"
+          validate-references: "true"
+          enforce-directories: "references,assets"

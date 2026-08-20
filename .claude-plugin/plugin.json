@@ -1,0 +1,9 @@
+{
+  "name": "max-skills",
+  "version": "1.0.0",
+  "description": "Agent skills for engineering work — starting with a read-only codebase audit.",
+  "author": {
+    "name": "OG-Max",
+    "url": "https://github.com/OG-Max"
+  }
+}
