@@ -1,7 +1,7 @@
 {
   "name": "max-skills",
-  "version": "1.1.0",
-  "description": "Agent skills for engineering and explainers — read-only codebase audit plus a Codex-ready ELI5 picture book.",
+  "version": "1.2.0",
+  "description": "Agent skills for engineering and explainers — read-only codebase audit plus ELI5 picture books for Grok, Codex, and Claude Code.",
   "author": {
     "name": "OG-Max",
     "url": "https://github.com/OG-Max"

@@ -37,13 +37,53 @@ npx skills add OG-Max/max-skills
 </details>
 
 <details>
+<summary><strong>Grok Build</strong></summary>
+
+Grok discovers skills from `~/.grok/skills/`, `.grok/skills/`, `~/.agents/skills/`, and Claude plugins (zero extra config).
+
+```bash
+npx skills add OG-Max/max-skills --skill eli5
+# pick ~/.grok/skills (user) or .grok/skills (this repo)
+```
+
+Or copy:
+
+```bash
+cp -R max-skills/skills/productivity/eli5 ~/.grok/skills/eli5
+```
+
+Restart Grok Build, then:
+
+```text
+/eli5 how does DNS work
+```
+
+Grok also reads this repo as a Claude-compatible plugin:
+
+```text
+/plugin marketplace add OG-Max/max-skills
+/plugin install max-skills@max-skills
+```
+
+</details>
+
+<details>
+<summary><strong>Grok Skills (web, iOS, Android)</strong></summary>
+
+Zip the folder `skills/productivity/eli5/` and upload it as a custom skill, or tell Grok to install from this GitHub path. Invoke with `/eli5 <topic>` or "explain X like I'm 5".
+
+On a phone there is no folder to open. The skill paints the picture book **in the chat** and attaches HTML when the product allows. It must not reply with only a disk path.
+
+</details>
+
+<details>
 <summary><strong>Codex, Cursor, Gemini, and others</strong></summary>
 
 ```bash
 npx skills add OG-Max/max-skills
 ```
 
-The installer asks which skills to copy and which agent directories to write (`~/.claude/skills`, `~/.agents/skills`, `.agents/skills`, `.cursor/skills`, …). Pull updates later with `npx skills update`.
+The installer asks which skills to copy and which agent directories to write (`~/.claude/skills`, `~/.grok/skills`, `~/.agents/skills`, `.cursor/skills`, …). Pull updates later with `npx skills update`.
 
 **Codex:** pick `~/.agents/skills` (user) or `.agents/skills` (this repo). Restart Codex. Invoke with `$eli5 how does DNS work`.
 
@@ -61,6 +101,7 @@ $skill-installer install https://github.com/OG-Max/max-skills/tree/main/skills/p
 ```bash
 git clone https://github.com/OG-Max/max-skills.git
 cp -R max-skills/skills/engineering/audit-your-codebase ~/.claude/skills/
+cp -R max-skills/skills/productivity/eli5 ~/.grok/skills/eli5
 cp -R max-skills/skills/productivity/eli5 ~/.agents/skills/eli5
 ```
 
@@ -70,10 +111,11 @@ Then, in a repo:
 
 > Audit this codebase for simplifications in data structures, state, algorithms, and ownership. Read-only.
 
-Or, in Codex:
+Or explain something like you're five:
 
 ```text
-$eli5 how does DNS work
+/eli5 how does DNS work      # Grok Build, Claude Code, Grok Skills
+$eli5 how does DNS work      # Codex
 ```
 
 ## Skills
@@ -94,7 +136,7 @@ None yet.
 
 | Skill | Use when |
 | --- | --- |
-| [eli5](skills/productivity/eli5/SKILL.md) | Dead-simple picture explainer. Codex: `$eli5 <topic>`. Writes a self-contained HTML picture book (big pictures, few words). Claude Code `/eli5` still works. |
+| [eli5](skills/productivity/eli5/SKILL.md) | Dead-simple picture explainer. Grok: `/eli5 <topic>`. Codex: `$eli5 <topic>`. Claude: `/eli5 <topic>`. Picture book with big pictures and few words. On Grok chat the slides render in the reply. |
 
 ## What `audit-your-codebase` does
 
@@ -111,14 +153,15 @@ Done only when every row is `recommend` or `skip`, every finding has full eviden
 
 Adapted from [Anthropic's community plugin](https://github.com/anthropics/claude-plugins-community/tree/main/eli5) (Thariq Shihipar).
 
-Claude Code's original skill is three lines plus `Topic: $ARGUMENTS` and an HTML **artifact**. Codex has neither slash-argument expansion nor an Artifact panel, so this port:
+Claude Code's original skill is three lines plus `Topic: $ARGUMENTS` and an HTML **artifact**. Grok and Codex have neither slash-argument expansion nor Claude's Artifact panel, so this port:
 
-1. Takes the topic from the user message (`$eli5 how DNS works` → `how DNS works`). Never prints the literal `$ARGUMENTS`.
-2. Writes **one** self-contained `eli5-<slug>.html` file — inline CSS + inline SVG, zero network requests.
-3. Follows picture-book visual rules (5–8 huge slides, ≤12 words each). No README, no React app, no dev server.
+1. Takes the topic from the user message (`/eli5 how DNS works` or `$eli5 how DNS works` → `how DNS works`). Never prints the literal `$ARGUMENTS`.
+2. On **Grok Build / Codex / Claude Code**, writes **one** self-contained `eli5-<slug>.html` file — inline CSS + inline SVG, zero network requests.
+3. On **Grok chat** (web, iOS, Android), paints the same picture book **in the reply** and attaches HTML when possible. Never cites a disk path the user cannot open.
+4. Follows picture-book visual rules (5–8 huge slides, ≤12 words each). No README, no React app, no dev server.
 
 ```text
-$eli5 how does DNS work
+/eli5 how does DNS work
 ```
 
 ## Layout
@@ -133,11 +176,13 @@ max-skills/
 │   │       ├── references/    # loaded on demand
 │   │       └── assets/        # report template
 │   └── productivity/
-│       └── eli5/              # Codex-ready ELI5 picture book
+│       └── eli5/              # ELI5 picture book (Grok + Codex + Claude)
 │           ├── SKILL.md
 │           ├── SOURCE.md
 │           ├── agents/openai.yaml
-│           └── references/visual-rules.md
+│           └── references/
+│               ├── visual-rules.md
+│               └── runtimes.md
 ├── scripts/validate-skill.mjs
 ├── .github/workflows/validate.yml
 ├── .claude-plugin/plugin.json

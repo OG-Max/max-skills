@@ -18,6 +18,15 @@ const KNOWN_FIELDS = new Set([
   "compatibility",
   "metadata",
   "allowed-tools",
+  // Grok Build extras (docs.x.ai). Spec agents ignore unknown keys.
+  "when-to-use",
+  "when_to_use",
+  "paths",
+  "argument-hint",
+  "user-invocable",
+  "disable-model-invocation",
+  "model",
+  "effort",
 ]);
 
 const errors = [];
