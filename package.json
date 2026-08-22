@@ -1,8 +1,8 @@
 {
   "name": "max-skills",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "OG-Max's agent skills for engineering work",
+  "description": "OG-Max's agent skills — codebase audit plus Codex-ready ELI5",
   "repository": {
     "type": "git",
     "url": "https://github.com/OG-Max/max-skills"

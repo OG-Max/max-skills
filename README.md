@@ -19,6 +19,7 @@ Browse first, or take a single skill:
 ```bash
 npx skills add OG-Max/max-skills --list
 npx skills add OG-Max/max-skills --skill audit-your-codebase
+npx skills add OG-Max/max-skills --skill eli5
 ```
 
 <details>
@@ -42,7 +43,15 @@ npx skills add OG-Max/max-skills
 npx skills add OG-Max/max-skills
 ```
 
-The installer asks which skills to copy and which agent directories to write (`~/.claude/skills`, `.agents/skills`, `.cursor/skills`, …). Pull updates later with `npx skills update`.
+The installer asks which skills to copy and which agent directories to write (`~/.claude/skills`, `~/.agents/skills`, `.agents/skills`, `.cursor/skills`, …). Pull updates later with `npx skills update`.
+
+**Codex:** pick `~/.agents/skills` (user) or `.agents/skills` (this repo). Restart Codex. Invoke with `$eli5 how does DNS work`.
+
+Inside Codex you can also install from the GitHub folder:
+
+```text
+$skill-installer install https://github.com/OG-Max/max-skills/tree/main/skills/productivity/eli5
+```
 
 </details>
 
@@ -52,6 +61,7 @@ The installer asks which skills to copy and which agent directories to write (`~
 ```bash
 git clone https://github.com/OG-Max/max-skills.git
 cp -R max-skills/skills/engineering/audit-your-codebase ~/.claude/skills/
+cp -R max-skills/skills/productivity/eli5 ~/.agents/skills/eli5
 ```
 
 </details>
@@ -59,6 +69,12 @@ cp -R max-skills/skills/engineering/audit-your-codebase ~/.claude/skills/
 Then, in a repo:
 
 > Audit this codebase for simplifications in data structures, state, algorithms, and ownership. Read-only.
+
+Or, in Codex:
+
+```text
+$eli5 how does DNS work
+```
 
 ## Skills
 
@@ -74,9 +90,11 @@ Triggered when the request matches the skill description. You can also invoke th
 
 None yet.
 
-### Productivity
+### Productivity — user-invoked
 
-None yet. New skills go in `skills/productivity/<name>/`.
+| Skill | Use when |
+| --- | --- |
+| [eli5](skills/productivity/eli5/SKILL.md) | Dead-simple picture explainer. Codex: `$eli5 <topic>`. Writes a self-contained HTML picture book (big pictures, few words). Claude Code `/eli5` still works. |
 
 ## What `audit-your-codebase` does
 
@@ -89,6 +107,20 @@ Adapted from [Aaron Francis's gist](https://gist.github.com/aarondfrancis/8735ed
 
 Done only when every row is `recommend` or `skip`, every finding has full evidence/scope/risk/validation, and the working tree is unchanged.
 
+## What `eli5` does
+
+Adapted from [Anthropic's community plugin](https://github.com/anthropics/claude-plugins-community/tree/main/eli5) (Thariq Shihipar).
+
+Claude Code's original skill is three lines plus `Topic: $ARGUMENTS` and an HTML **artifact**. Codex has neither slash-argument expansion nor an Artifact panel, so this port:
+
+1. Takes the topic from the user message (`$eli5 how DNS works` → `how DNS works`). Never prints the literal `$ARGUMENTS`.
+2. Writes **one** self-contained `eli5-<slug>.html` file — inline CSS + inline SVG, zero network requests.
+3. Follows picture-book visual rules (5–8 huge slides, ≤12 words each). No README, no React app, no dev server.
+
+```text
+$eli5 how does DNS work
+```
+
 ## Layout
 
 ```text
@@ -100,7 +132,12 @@ max-skills/
 │   │       ├── SOURCE.md
 │   │       ├── references/    # loaded on demand
 │   │       └── assets/        # report template
-│   └── productivity/          # (empty — add skills here)
+│   └── productivity/
+│       └── eli5/              # Codex-ready ELI5 picture book
+│           ├── SKILL.md
+│           ├── SOURCE.md
+│           ├── agents/openai.yaml
+│           └── references/visual-rules.md
 ├── scripts/validate-skill.mjs
 ├── .github/workflows/validate.yml
 ├── .claude-plugin/plugin.json
@@ -121,6 +158,7 @@ CI on every push walks `skills/**/SKILL.md` and runs three independent checks:
 ```bash
 node scripts/validate-skill.mjs
 npx --yes skills-ref validate ./skills/engineering/audit-your-codebase
+npx --yes skills-ref validate ./skills/productivity/eli5
 ```
 
 A green badge means the published skills still satisfy the spec.
@@ -140,3 +178,5 @@ See [write-a-skill](https://github.com/mattpocock/skills) and the [Agent Skills 
 [Apache-2.0](LICENSE).
 
 `audit-your-codebase` methodology is from [Aaron Francis](https://gist.github.com/aarondfrancis/8735edbe48532f97ee5ea818db4dbd47). This repo only packages it as a spec-valid skill. Not affiliated.
+
+`eli5` is adapted from [anthropics/claude-plugins-community](https://github.com/anthropics/claude-plugins-community/tree/main/eli5) by Thariq Shihipar (MIT). Skill files under `skills/productivity/eli5/` stay MIT; the rest of this repo is Apache-2.0. Not affiliated with Anthropic.

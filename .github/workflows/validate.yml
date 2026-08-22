@@ -45,3 +45,10 @@ jobs:
           fail-on-warning: "true"
           validate-references: "true"
           enforce-directories: "references,assets"
+
+      - name: Marketplace spec action (eli5)
+        uses: Flash-Brew-Digital/validate-skill@v1
+        with:
+          path: ./skills/productivity/eli5
+          fail-on-warning: "true"
+          validate-references: "true"
