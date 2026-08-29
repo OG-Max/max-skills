@@ -4,6 +4,8 @@
 
 Agent skills for real engineering work. Small, composable, and valid against the [Agent Skills spec](https://agentskills.io/specification).
 
+中文学习资料：[Skill 规格与逐项解读](docs/zh-CN/skills-guide.md)。该文档用中文说明仓库中每个 Skill 的触发场景、完整工作流、输出和限制。
+
 This is a **collection**, not a process framework. Each folder under `skills/` is one skill. Install the ones you want. Hack them. Leave the rest.
 
 Layout follows [mattpocock/skills](https://github.com/mattpocock/skills): categories under `skills/`, one directory per skill, `SKILL.md` as the entry point.
