@@ -4,6 +4,8 @@
 
 Agent skills for real engineering work. Small, composable, and valid against the [Agent Skills spec](https://agentskills.io/specification).
 
+中文学习资料：[Skill 规格与逐项解读](docs/zh-CN/skills-guide.md)。该文档用中文说明仓库中每个 Skill 的触发场景、完整工作流、输出和限制。
+
 This is a **collection**, not a process framework. Each folder under `skills/` is one skill. Install the ones you want. Hack them. Leave the rest.
 
 Layout follows [mattpocock/skills](https://github.com/mattpocock/skills): categories under `skills/`, one directory per skill, `SKILL.md` as the entry point.
@@ -20,6 +22,7 @@ Browse first, or take a single skill:
 npx skills add OG-Max/max-skills --list
 npx skills add OG-Max/max-skills --skill audit-your-codebase
 npx skills add OG-Max/max-skills --skill eli5
+npx skills add OG-Max/max-skills --skill cursor-team-kit
 ```
 
 <details>
@@ -33,6 +36,20 @@ npx skills add OG-Max/max-skills --skill eli5
 # or copy editable files, same as other agents
 npx skills add OG-Max/max-skills
 ```
+
+</details>
+
+<details>
+<summary><strong>ChatGPT</strong></summary>
+
+Zip an individual skill folder and upload it as a custom skill when custom skills are enabled for your account or workspace. Keep `SKILL.md` at the archive root:
+
+```bash
+npm run package
+# Upload dist/cursor-team-kit.zip (or another archive from dist/).
+```
+
+The included `agents/openai.yaml` supplies the OpenAI-facing display name, description, and starter prompt.
 
 </details>
 
@@ -137,6 +154,17 @@ None yet.
 | Skill | Use when |
 | --- | --- |
 | [eli5](skills/productivity/eli5/SKILL.md) | Dead-simple picture explainer. Grok: `/eli5 <topic>`. Codex: `$eli5 <topic>`. Claude: `/eli5 <topic>`. Picture book with big pictures and few words. On Grok chat the slides render in the reply. |
+| [cursor-team-kit](skills/productivity/cursor-team-kit/SKILL.md) | Audit every Cursor team-kit artifact, reuse what Codex supports natively, and port only the gaps into a repository-native kit with GitHub and GitLab workflows. |
+
+### Codex suitability and usage scenarios
+
+| Skill | Codex suitability | Use it when | Do not use it when |
+| --- | --- | --- | --- |
+| `audit-your-codebase` | Native Agent Skill; subagents are optional and have a sequential fallback. Forge-independent. | You need a read-only, repository-wide audit of data models, invalid states, subsystem ownership, control flow, or material simplifications. | You want edits, a security scan, performance profiling, dependency updates, or a tiny bug fix. |
+| `eli5` | Native Agent Skill with Codex-specific self-contained HTML output; no Artifact panel or slash-argument expansion required. | You want a visual, child-friendly explanation of one topic, such as DNS or Git rebase. | You want production UI, detailed documentation, a code audit, or plain text only. |
+| `cursor-team-kit` | Portable workflow Skill; Codex natively covers `AGENTS.md` and Agent Skills, while Cursor manifests, `.mdc` metadata, and slash commands require assessment or conversion. | You need to audit or migrate team AI configuration, avoid redundant ports, or support both GitHub PR and GitLab MR workflows. | You are implementing an ordinary feature or cannot inspect the source plugin artifacts. |
+
+The detailed assessment and the checklist used for future skills live in [`skill-suitability.md`](skills/productivity/cursor-team-kit/references/skill-suitability.md). GitLab support includes public and self-hosted instances, `glab mr create`, GitLab CI awareness, and a normal-Git fallback when no forge CLI is available.
 
 ## What `audit-your-codebase` does
 
@@ -204,7 +232,14 @@ CI on every push walks `skills/**/SKILL.md` and runs three independent checks:
 node scripts/validate-skill.mjs
 npx --yes skills-ref validate ./skills/engineering/audit-your-codebase
 npx --yes skills-ref validate ./skills/productivity/eli5
+npx --yes skills-ref validate ./skills/productivity/cursor-team-kit
+npm run package
 ```
+
+`npm run package` validates every generated ZIP and writes one self-contained
+archive per skill plus `dist/SHA256SUMS`. Pull-request CI uploads the complete
+`dist/` directory as the `max-skills` workflow artifact, so packages can be
+downloaded without cloning the repository.
 
 A green badge means the published skills still satisfy the spec.
 

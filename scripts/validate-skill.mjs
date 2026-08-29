@@ -106,6 +106,11 @@ function unquote(s) {
   ) {
     return t.slice(1, -1);
   }
+  if (/:(?:\s|$)/.test(t)) {
+    fail(
+      `invalid unquoted YAML scalar ${JSON.stringify(t)}: quote values containing a colon followed by whitespace`,
+    );
+  }
   return t;
 }
 
@@ -196,6 +201,24 @@ function validateSkill(skillDir) {
   if (bodyLines > 500) warn(`${rel}: body is ${bodyLines} lines (spec suggests <500)`);
 
   referencedFiles(body, skillDir);
+
+  const openaiFile = path.join(skillDir, "agents", "openai.yaml");
+  if (!fs.existsSync(openaiFile)) {
+    warn(`${rel}: agents/openai.yaml missing (Codex/ChatGPT UI metadata unavailable)`);
+  } else {
+    const openai = fs.readFileSync(openaiFile, "utf8");
+    if (!/^interface:\s*$/m.test(openai)) {
+      fail(`${rel}: agents/openai.yaml must contain an interface mapping`);
+    }
+    for (const key of ["display_name", "short_description", "default_prompt"]) {
+      if (!new RegExp(`^\\s{2}${key}:\\s*"[^"]+"\\s*$`, "m").test(openai)) {
+        fail(`${rel}: agents/openai.yaml must contain quoted interface.${key}`);
+      }
+    }
+    if (!openai.includes(`$${name}`)) {
+      fail(`${rel}: agents/openai.yaml default prompt must mention $${name}`);
+    }
+  }
 }
 
 function main() {
