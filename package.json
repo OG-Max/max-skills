@@ -1,14 +1,15 @@
 {
   "name": "max-skills",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "private": true,
-  "description": "OG-Max's agent skills — codebase audit plus ELI5 for Grok, Codex, and Claude Code",
+  "description": "OG-Max's portable agent skills for engineering and productivity workflows",
   "repository": {
     "type": "git",
     "url": "https://github.com/OG-Max/max-skills"
   },
   "license": "Apache-2.0",
   "scripts": {
-    "validate": "node scripts/validate-skill.mjs"
+    "validate": "node scripts/validate-skill.mjs",
+    "package": "bash scripts/package-skills.sh"
   }
 }

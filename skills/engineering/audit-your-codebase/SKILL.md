@@ -27,6 +27,7 @@ This is an **audit-only** exercise.
 - Do **not** force an abstraction. Prefer boring local code when it is already clear.
 - Do **not** recommend changes solely for stylistic consistency, hypothetical extensibility, minor line-count reduction, or moving existing branching behind a new type.
 - Do **not** assume a broad catch-all inventory row proves coverage.
+- Treat GitHub and GitLab as equally valid hosts. This audit reads the checked-out tree and must not require `gh`, `glab`, a pull request, or a merge request.
 
 If the user later asks you to implement a finding, that is a **different task**. Finish the audit first; leave the repository unchanged.
 
@@ -82,13 +83,13 @@ Split a candidate when two teams, two persistence models, or two public interfac
 
 ## 2) Run bounded subsystem reviews
 
-Use fresh, **read-only** agents where available. Give every worker **one** distinct subsystem with an exact, non-overlapping ownership boundary.
+Use fresh, **read-only** agents where available and permitted by the active runtime. Give every worker **one** distinct subsystem with an exact, non-overlapping ownership boundary.
 
 - Keep concurrency bounded to the number of lanes you can actively coordinate.
 - Use **one** consolidated wait mechanism.
 - Do not interrupt productive workers merely because they are slow.
 - Close completed workers after harvesting their results.
-- If subagents are unavailable, review subsystems sequentially with the same brief and the same isolation rules.
+- If subagents are unavailable or delegation is not permitted, review subsystems sequentially with the same brief and the same isolation rules. Subagents improve throughput; they are not required for correctness.
 
 Each worker receives the brief in [references/worker-brief.md](references/worker-brief.md) (paste it; do not paraphrase away the constraints).
 
@@ -159,7 +160,7 @@ Do not claim completion with open `queued` or `in_review` rows.
 6. Run the five meta-passes in section 4
 7. If a new subsystem appears, add a row and return to 3
 8. Emit the final ranked report
-9. Confirm git status / working tree is unchanged
+9. Confirm git status / working tree is unchanged (GitHub, GitLab, another forge, or no remote)
 ```
 
 ### Status machine
