@@ -1,6 +1,6 @@
 ---
 name: cursor-team-kit
-description: Audit, port, build, or update a repository's shared AI collaboration kit: project instructions, reusable skills, agent roles, team commands, GitHub or GitLab workflows, and onboarding guidance for Cursor, Codex, and ChatGPT. Use when a team wants to classify which Cursor capabilities Codex supports natively, translate only the unsupported pieces, standardize coding-agent behavior, remove conflicting AI instructions, or create a forge-neutral source of truth.
+description: Audit, port, build, or update a repository's shared AI collaboration kit including project instructions, reusable skills, agent roles, team commands, GitHub or GitLab workflows, and onboarding materials.
 ---
 
 # Cursor Team Kit

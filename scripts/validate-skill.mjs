@@ -106,6 +106,11 @@ function unquote(s) {
   ) {
     return t.slice(1, -1);
   }
+  if (/:(?:\s|$)/.test(t)) {
+    fail(
+      `invalid unquoted YAML scalar ${JSON.stringify(t)}: quote values containing a colon followed by whitespace`,
+    );
+  }
   return t;
 }
 
