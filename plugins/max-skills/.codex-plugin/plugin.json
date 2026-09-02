@@ -1,0 +1,37 @@
+{
+  "name": "max-skills",
+  "version": "1.5.0",
+  "description": "Portable skills for codebase audits, visual explainers, and GitHub or GitLab team workflows.",
+  "author": {
+    "name": "OG-Max",
+    "url": "https://github.com/OG-Max"
+  },
+  "homepage": "https://github.com/OG-Max/max-skills#readme",
+  "repository": "https://github.com/OG-Max/max-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "chatgpt",
+    "github",
+    "gitlab"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Max Skills",
+    "shortDescription": "Portable engineering and productivity skills.",
+    "longDescription": "Audit codebases, create visual explainers, and migrate shared AI team workflows across Codex, ChatGPT, GitHub, and GitLab.",
+    "developerName": "OG-Max",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/OG-Max/max-skills",
+    "defaultPrompt": [
+      "Audit this codebase without changing it.",
+      "Explain DNS like I'm five with pictures.",
+      "Port this team's AI kit for GitHub and GitLab."
+    ]
+  }
+}

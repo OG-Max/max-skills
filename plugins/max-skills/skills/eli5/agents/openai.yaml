@@ -1,0 +1,7 @@
+interface:
+  display_name: "ELI5"
+  short_description: "Picture-book explainer: big pictures, few words."
+  brand_color: "#F59E0B"
+  default_prompt: "Use $eli5 to explain how DNS works like I'm 5, as a picture-book HTML page."
+policy:
+  allow_implicit_invocation: true
