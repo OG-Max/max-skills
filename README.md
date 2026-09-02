@@ -42,14 +42,22 @@ npx skills add OG-Max/max-skills
 <details>
 <summary><strong>ChatGPT</strong></summary>
 
-Zip an individual skill folder and upload it as a custom skill when custom skills are enabled for your account or workspace. Keep `SKILL.md` at the archive root:
+Install the repository as a plugin from its GitHub URL in ChatGPT or the Codex app when plugin installation is enabled for your account or workspace. The installable bundle at `plugins/max-skills` contains a `.codex-plugin/plugin.json` manifest and discovers every bundled skill under `skills/` and exposes starter prompts in the plugin UI.
+
+After this branch is merged, use:
+
+```text
+https://github.com/OG-Max/max-skills/tree/main/plugins/max-skills
+```
+
+The canonical editable sources remain in the repository’s category-based `skills/<category>/<name>` tree. You can also install one skill without the plugin. Zip an individual skill folder and upload it as a custom skill, keeping `SKILL.md` at the archive root:
 
 ```bash
 npm run package
 # Upload dist/cursor-team-kit.zip (or another archive from dist/).
 ```
 
-The included `agents/openai.yaml` supplies the OpenAI-facing display name, description, and starter prompt.
+The plugin manifest supplies collection-level metadata. Each skill's `agents/openai.yaml` supplies its OpenAI-facing display name, description, and starter prompt.
 
 </details>
 
@@ -212,6 +220,9 @@ max-skills/
 │               ├── visual-rules.md
 │               └── runtimes.md
 ├── scripts/validate-skill.mjs
+├── plugins/max-skills/            # installable ChatGPT and Codex plugin bundle
+│   ├── .codex-plugin/plugin.json
+│   └── skills/                    # self-contained copies for plugin ingestion
 ├── .github/workflows/validate.yml
 ├── .claude-plugin/plugin.json
 ├── AGENTS.md

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cursor Team Kit"
+  short_description: "Create and maintain shared AI team conventions."
+  default_prompt: "Use $cursor-team-kit to create a shared AI collaboration kit for this repository."
