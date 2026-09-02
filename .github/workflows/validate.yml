@@ -66,6 +66,7 @@ jobs:
       - name: Upload installable skill archives
         uses: actions/upload-artifact@v4
         with:
-          name: max-skills
+          name: max-skills-installables
           path: dist/
           if-no-files-found: error
+          retention-days: 30

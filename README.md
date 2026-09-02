@@ -42,14 +42,29 @@ npx skills add OG-Max/max-skills
 <details>
 <summary><strong>ChatGPT</strong></summary>
 
-Zip an individual skill folder and upload it as a custom skill when custom skills are enabled for your account or workspace. Keep `SKILL.md` at the archive root:
+Install the repository as a plugin from its GitHub URL in ChatGPT or the Codex app when plugin installation is enabled for your account or workspace. The installable bundle at `plugins/max-skills` contains a `.codex-plugin/plugin.json` manifest and discovers every bundled skill under `skills/` and exposes starter prompts in the plugin UI.
+
+After this branch is merged, use:
+
+```text
+https://github.com/OG-Max/max-skills/tree/main/plugins/max-skills
+```
+
+The canonical editable sources remain in the repository’s category-based `skills/<category>/<name>` tree. You can also install one skill without the plugin. Zip an individual skill folder and upload it as a custom skill, keeping `SKILL.md` at the archive root:
 
 ```bash
 npm run package
 # Upload dist/cursor-team-kit.zip (or another archive from dist/).
 ```
 
-The included `agents/openai.yaml` supplies the OpenAI-facing display name, description, and starter prompt.
+The plugin manifest supplies collection-level metadata. Each skill's `agents/openai.yaml` supplies its OpenAI-facing display name, description, and starter prompt.
+
+To download prebuilt packages after a push or merge, open the latest successful
+**Validate skills** run in GitHub Actions and download the
+`max-skills-installables` artifact. It contains non-empty standalone skill ZIPs,
+`max-skills-plugin.zip`, and `SHA256SUMS`. Extract the Actions artifact once;
+upload `max-skills-plugin.zip` as the plugin package without rearranging its
+contents.
 
 </details>
 
@@ -212,6 +227,9 @@ max-skills/
 │               ├── visual-rules.md
 │               └── runtimes.md
 ├── scripts/validate-skill.mjs
+├── plugins/max-skills/            # installable ChatGPT and Codex plugin bundle
+│   ├── .codex-plugin/plugin.json
+│   └── skills/                    # self-contained copies for plugin ingestion
 ├── .github/workflows/validate.yml
 ├── .claude-plugin/plugin.json
 ├── AGENTS.md
@@ -236,10 +254,15 @@ npx --yes skills-ref validate ./skills/productivity/cursor-team-kit
 npm run package
 ```
 
-`npm run package` validates every generated ZIP and writes one self-contained
-archive per skill plus `dist/SHA256SUMS`. Pull-request CI uploads the complete
-`dist/` directory as the `max-skills` workflow artifact, so packages can be
-downloaded without cloning the repository.
+The packaging command creates three standalone skill archives plus
+`dist/max-skills-plugin.zip`. It verifies every ZIP, checks required entry-point
+files, rejects empty archives, confirms that plugin copies match canonical
+skills, and writes hashes for every archive to `dist/SHA256SUMS`.
+
+On pushes, pull requests, and manual workflow runs, CI uploads the complete
+`dist/` directory as the `max-skills-installables` workflow artifact, so the
+standalone skills and the complete plugin can be downloaded without cloning the
+repository.
 
 A green badge means the published skills still satisfy the spec.
 
